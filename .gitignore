@@ -1,0 +1,22 @@
+# Dependencies & build output
+node_modules/
+dist/
+dist-ssr/
+
+# Env & local
+*.local
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Root tsc emit (source of truth is index.ts)
+/index.js
+/index.js.map
+/index.d.ts
+/index.d.ts.map
