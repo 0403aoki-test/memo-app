@@ -15,8 +15,7 @@ dist-ssr/
 .vscode/*
 !.vscode/extensions.json
 
-# Root tsc emit (source of truth is index.ts)
-/index.js
-/index.js.map
-/index.d.ts
-/index.d.ts.map
+# Python
+backend/.venv/
+backend/__pycache__/
+*.pyc
