@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
 
-  let { title, code, children }: {
+  let { title, code, rationale, children }: {
     title: string
     code: string
+    rationale?: string
     children: Snippet
   } = $props()
 
@@ -32,11 +33,18 @@
 
     <!-- コンテンツ -->
     {#if tab === 'preview'}
-      <div class="p-6 bg-white flex flex-wrap gap-3 items-center">
+      <div class="p-6 bg-white flex flex-wrap gap-4 items-center">
         {@render children()}
       </div>
     {:else}
       <pre class="p-5 bg-gray-900 text-gray-100 text-sm overflow-x-auto leading-relaxed"><code>{code}</code></pre>
+    {/if}
+
+    {#if rationale}
+      <div class="px-5 py-4 bg-amber-50 border-t border-amber-100 flex gap-3 text-sm text-amber-800">
+        <span class="shrink-0 mt-0.5">💡</span>
+        <p class="leading-relaxed"><strong class="font-semibold">なぜこのUIが良いのか：</strong>{rationale}</p>
+      </div>
     {/if}
   </div>
 </div>
