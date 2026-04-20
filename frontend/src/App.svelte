@@ -20,26 +20,80 @@
   let section = $state<Section>('tailwind')
 </script>
 
-<div class="min-h-screen bg-gray-50">
-  <!-- ヘッダー -->
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center gap-6 flex-wrap">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-md bg-violet-600 flex items-center justify-center">
-          <span class="text-white text-xs font-bold">UI</span>
+<div style="min-height: 100svh; background: #f5f5f7;">
+  <!-- Apple-style Nav -->
+  <header style="
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    display: flex;
+    align-items: center;
+  ">
+    <div style="
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    ">
+      <!-- Logo -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="
+          width: 20px;
+          height: 20px;
+          border-radius: 5px;
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <span style="color: white; font-size: 10px; font-weight: 700; font-family: system-ui, sans-serif; line-height: 1;">UI</span>
         </div>
-        <span class="font-bold text-gray-800 text-sm">学習ショーケース</span>
+        <span style="color: white; font-size: 12px; font-family: 'SF Pro Text', system-ui, sans-serif; opacity: 0.8;">学習ショーケース</span>
       </div>
-      <nav class="flex gap-1">
+
+      <!-- Nav tabs -->
+      <nav style="display: flex; gap: 4px;">
         <button
           onclick={() => section = 'tailwind'}
-          class="px-4 py-1.5 rounded-lg text-sm font-medium transition-all {section === 'tailwind' ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-100'}"
+          style="
+            padding: 5px 14px;
+            border-radius: 980px;
+            font-size: 12px;
+            font-family: 'SF Pro Text', system-ui, sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.12px;
+            border: 1px solid {section === 'tailwind' ? 'rgba(255,255,255,0.3)' : 'transparent'};
+            background: {section === 'tailwind' ? 'rgba(255,255,255,0.15)' : 'transparent'};
+            color: {section === 'tailwind' ? '#ffffff' : 'rgba(255,255,255,0.6)'};
+            cursor: pointer;
+            transition: all 0.2s;
+          "
         >
           Tailwind CSS
         </button>
         <button
           onclick={() => section = 'daisyui'}
-          class="px-4 py-1.5 rounded-lg text-sm font-medium transition-all {section === 'daisyui' ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-100'}"
+          style="
+            padding: 5px 14px;
+            border-radius: 980px;
+            font-size: 12px;
+            font-family: 'SF Pro Text', system-ui, sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.12px;
+            border: 1px solid {section === 'daisyui' ? 'rgba(255,255,255,0.3)' : 'transparent'};
+            background: {section === 'daisyui' ? 'rgba(255,255,255,0.15)' : 'transparent'};
+            color: {section === 'daisyui' ? '#ffffff' : 'rgba(255,255,255,0.6)'};
+            cursor: pointer;
+            transition: all 0.2s;
+          "
         >
           DaisyUI
         </button>
@@ -47,16 +101,91 @@
     </div>
   </header>
 
-  <!-- コンテンツ -->
-  <main class="max-w-4xl mx-auto px-6 py-10">
-
-    {#if section === 'tailwind'}
-      <div class="mb-8">
-        <p class="text-sm text-gray-800 font-semibold mb-1">Tailwind CSS ユーティリティ集</p>
-        <p class="text-xs text-gray-400">各コンポーネントの「コード」タブでクラスを確認できます。</p>
+  <!-- Hero section -->
+  <section style="
+    background: #000000;
+    padding: 80px 24px 72px;
+    text-align: center;
+  ">
+    <div style="max-width: 980px; margin: 0 auto;">
+      <p style="
+        font-family: 'SF Pro Display', system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: #2997ff;
+        margin-bottom: 12px;
+      ">
+        {section === 'tailwind' ? 'Tailwind CSS' : 'DaisyUI'}
+      </p>
+      <h1 style="
+        font-family: 'SF Pro Display', system-ui, sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 600;
+        line-height: 1.07;
+        letter-spacing: -0.28px;
+        color: #ffffff;
+        margin-bottom: 20px;
+      ">
+        {section === 'tailwind' ? 'ユーティリティ集' : 'コンポーネント一覧'}
+      </h1>
+      <p style="
+        font-family: 'SF Pro Text', system-ui, sans-serif;
+        font-size: 21px;
+        font-weight: 400;
+        line-height: 1.19;
+        letter-spacing: 0.231px;
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 32px;
+      ">
+        {section === 'tailwind'
+          ? '各コンポーネントの「コード」タブでクラスを確認できます。'
+          : 'DaisyUI の主要コンポーネントをカテゴリ別に紹介します。'}
+      </p>
+      <!-- Pill CTAs -->
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <button
+          onclick={() => section = 'tailwind'}
+          style="
+            padding: 8px 20px;
+            border-radius: 980px;
+            font-family: 'SF Pro Text', system-ui, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+            background: {section === 'tailwind' ? '#0071e3' : 'transparent'};
+            color: #ffffff;
+            border: 1px solid {section === 'tailwind' ? 'transparent' : 'rgba(255,255,255,0.6)'};
+            cursor: pointer;
+            transition: all 0.2s;
+          "
+        >Tailwind CSS</button>
+        <button
+          onclick={() => section = 'daisyui'}
+          style="
+            padding: 8px 20px;
+            border-radius: 980px;
+            font-family: 'SF Pro Text', system-ui, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+            background: {section === 'daisyui' ? '#0071e3' : 'transparent'};
+            color: #ffffff;
+            border: 1px solid {section === 'daisyui' ? 'transparent' : 'rgba(255,255,255,0.6)'};
+            cursor: pointer;
+            transition: all 0.2s;
+          "
+        >DaisyUI</button>
       </div>
+    </div>
+  </section>
 
-      <!-- コンポーネント一覧 (12セクション) -->
+  <!-- Main content -->
+  <main style="
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  ">
+    {#if section === 'tailwind'}
       <Typography />
       <Buttons />
       <Badges />
@@ -69,15 +198,22 @@
       <Animations />
       <Grid />
       <Table />
-
     {:else}
-      <div class="mb-8">
-        <p class="text-sm text-gray-800 font-semibold mb-1">DaisyUI コンポーネント一覧</p>
-        <p class="text-xs text-gray-400">DaisyUI の主要コンポーネントをカテゴリ別に紹介します。「コード」タブでクラスを確認できます。</p>
-      </div>
-
       <DaisyShowcase />
     {/if}
-
   </main>
+
+  <!-- Footer -->
+  <footer style="
+    background: #000000;
+    padding: 24px;
+    text-align: center;
+  ">
+    <p style="
+      font-family: 'SF Pro Text', system-ui, sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: -0.12px;
+    ">学習ショーケース — Apple Design System インスパイア</p>
+  </footer>
 </div>
