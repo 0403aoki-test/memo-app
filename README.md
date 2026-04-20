@@ -23,8 +23,13 @@ TypeScript・Svelte・FastAPI の学習用リポジトリです。
 ### フロントエンド
 
 ```bash
+# frontend/ ディレクトリに移動（package.json がここにある）
 cd frontend
+
+# package.json の依存パッケージ（Svelte, Vite, Tailwindなど）をインストール
 npm install
+
+# Vite 開発サーバーを起動（ファイル保存時に自動リロード）
 npm run dev
 ```
 
@@ -33,9 +38,14 @@ npm run dev
 ### バックエンド
 
 ```bash
+# backend/ ディレクトリに移動（main.py, requirements.txt がここにある）
 cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload
+
+# requirements.txt の依存パッケージ（FastAPI, uvicornなど）をインストール
+pip3 install -r requirements.txt
+
+# uvicorn で FastAPI サーバーを起動（--reload: ファイル変更時に自動再起動）
+python3 -m uvicorn main:app --reload
 ```
 
 API は http://localhost:8000 で起動する。
@@ -57,4 +67,5 @@ API は http://localhost:8000 で起動する。
 
 | コマンド | 説明 |
 |---|---|
-| `uvicorn main:app --reload` | 開発サーバー起動（ホットリロード有効） |
+| `pip3 install -r requirements.txt` | 依存パッケージのインストール |
+| `python3 -m uvicorn main:app --reload` | 開発サーバー起動（ホットリロード有効） |
