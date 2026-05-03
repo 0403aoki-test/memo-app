@@ -1,32 +1,27 @@
-from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import Session, sessionmaker
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-engine = create_engine(DATABASE_URL.replace("postgresql://", "postgresql+psycopg://"))
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+from database import engine, get_db
+from models import Base
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+from routers.worker import router as worker_router
+app.include_router(worker_router)
+
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.get("/")

@@ -20,35 +20,45 @@ TypeScript・Svelte・FastAPI の学習用リポジトリです。
 
 ## セットアップ & 起動
 
-### フロントエンド
-
-```bash
-# frontend/ ディレクトリに移動（package.json がここにある）
-cd frontend
-
-# package.json の依存パッケージ（Svelte, Vite, Tailwindなど）をインストール
-npm install
-
-# Vite 開発サーバーを起動（ファイル保存時に自動リロード）
-npm run dev
-```
-
-ブラウザで http://localhost:5173 を開く。
-
 ### バックエンド
 
 ```bash
-# backend/ ディレクトリに移動（main.py, requirements.txt がここにある）
 cd backend
+```
 
+**初回のみ**
+```bash
 # requirements.txt の依存パッケージ（FastAPI, uvicornなど）をインストール
 pip3 install -r requirements.txt
+```
 
+**毎回**
+```bash
 # uvicorn で FastAPI サーバーを起動（--reload: ファイル変更時に自動再起動）
 python3 -m uvicorn main:app --reload
 ```
 
 API は http://localhost:8000 で起動する。
+
+### フロントエンド
+
+```bash
+cd frontend
+```
+
+**初回のみ**
+```bash
+# package.json の依存パッケージ（Svelte, Vite, Tailwindなど）をインストール
+npm install
+```
+
+**毎回**
+```bash
+# Vite 開発サーバーを起動（ファイル保存時に自動リロード）
+npm run dev
+```
+
+ブラウザで http://localhost:5173 を開く。
 
 ---
 
