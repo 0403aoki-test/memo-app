@@ -16,7 +16,14 @@
   // DaisyUI
   import DaisyShowcase from './lib/daisyui/DaisyShowcase.svelte'
 
-  type Section = 'tailwind' | 'daisyui'
+  // Worker Demo
+  import WorkerDemo from './lib/worker/WorkerDemo.svelte'
+
+  // Navigation components
+  import NavButton from './lib/NavButton.svelte'
+  import PillButton from './lib/PillButton.svelte'
+
+  type Section = 'tailwind' | 'daisyui' | 'worker'
   let section = $state<Section>('tailwind')
 </script>
 
@@ -61,42 +68,9 @@
 
       <!-- Nav tabs -->
       <nav style="display: flex; gap: 4px;">
-        <button
-          onclick={() => section = 'tailwind'}
-          style="
-            padding: 5px 14px;
-            border-radius: 980px;
-            font-size: 12px;
-            font-family: 'SF Pro Text', system-ui, sans-serif;
-            font-weight: 400;
-            letter-spacing: -0.12px;
-            border: 1px solid {section === 'tailwind' ? 'rgba(255,255,255,0.3)' : 'transparent'};
-            background: {section === 'tailwind' ? 'rgba(255,255,255,0.15)' : 'transparent'};
-            color: {section === 'tailwind' ? '#ffffff' : 'rgba(255,255,255,0.6)'};
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-        >
-          Tailwind CSS
-        </button>
-        <button
-          onclick={() => section = 'daisyui'}
-          style="
-            padding: 5px 14px;
-            border-radius: 980px;
-            font-size: 12px;
-            font-family: 'SF Pro Text', system-ui, sans-serif;
-            font-weight: 400;
-            letter-spacing: -0.12px;
-            border: 1px solid {section === 'daisyui' ? 'rgba(255,255,255,0.3)' : 'transparent'};
-            background: {section === 'daisyui' ? 'rgba(255,255,255,0.15)' : 'transparent'};
-            color: {section === 'daisyui' ? '#ffffff' : 'rgba(255,255,255,0.6)'};
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-        >
-          DaisyUI
-        </button>
+        <NavButton label="Tailwind CSS" active={section === 'tailwind'} onclick={() => section = 'tailwind'} />
+        <NavButton label="DaisyUI" active={section === 'daisyui'} onclick={() => section = 'daisyui'} />
+        <NavButton label="Thread Worker" active={section === 'worker'} onclick={() => section = 'worker'} />
       </nav>
     </div>
   </header>
@@ -117,7 +91,7 @@
         color: #2997ff;
         margin-bottom: 12px;
       ">
-        {section === 'tailwind' ? 'Tailwind CSS' : 'DaisyUI'}
+        {section === 'tailwind' ? 'Tailwind CSS' : section === 'daisyui' ? 'DaisyUI' : 'Backend Demo'}
       </p>
       <h1 style="
         font-family: 'SF Pro Display', system-ui, sans-serif;
@@ -128,7 +102,7 @@
         color: #ffffff;
         margin-bottom: 20px;
       ">
-        {section === 'tailwind' ? 'ユーティリティ集' : 'コンポーネント一覧'}
+        {section === 'tailwind' ? 'ユーティリティ集' : section === 'daisyui' ? 'コンポーネント一覧' : 'Thread Worker'}
       </h1>
       <p style="
         font-family: 'SF Pro Text', system-ui, sans-serif;
@@ -141,40 +115,15 @@
       ">
         {section === 'tailwind'
           ? '各コンポーネントの「コード」タブでクラスを確認できます。'
-          : 'DaisyUI の主要コンポーネントをカテゴリ別に紹介します。'}
+          : section === 'daisyui'
+          ? 'DaisyUI の主要コンポーネントをカテゴリ別に紹介します。'
+          : '並列処理・直列処理・RPM制限の動作を体験できます。'}
       </p>
       <!-- Pill CTAs -->
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <button
-          onclick={() => section = 'tailwind'}
-          style="
-            padding: 8px 20px;
-            border-radius: 980px;
-            font-family: 'SF Pro Text', system-ui, sans-serif;
-            font-size: 17px;
-            font-weight: 400;
-            background: {section === 'tailwind' ? '#0071e3' : 'transparent'};
-            color: #ffffff;
-            border: 1px solid {section === 'tailwind' ? 'transparent' : 'rgba(255,255,255,0.6)'};
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-        >Tailwind CSS</button>
-        <button
-          onclick={() => section = 'daisyui'}
-          style="
-            padding: 8px 20px;
-            border-radius: 980px;
-            font-family: 'SF Pro Text', system-ui, sans-serif;
-            font-size: 17px;
-            font-weight: 400;
-            background: {section === 'daisyui' ? '#0071e3' : 'transparent'};
-            color: #ffffff;
-            border: 1px solid {section === 'daisyui' ? 'transparent' : 'rgba(255,255,255,0.6)'};
-            cursor: pointer;
-            transition: all 0.2s;
-          "
-        >DaisyUI</button>
+        <PillButton label="Tailwind CSS" active={section === 'tailwind'} onclick={() => section = 'tailwind'} />
+        <PillButton label="DaisyUI" active={section === 'daisyui'} onclick={() => section = 'daisyui'} />
+        <PillButton label="Thread Worker" active={section === 'worker'} onclick={() => section = 'worker'} />
       </div>
     </div>
   </section>
@@ -198,8 +147,10 @@
       <Animations />
       <Grid />
       <Table />
-    {:else}
+    {:else if section === 'daisyui'}
       <DaisyShowcase />
+    {:else}
+      <WorkerDemo />
     {/if}
   </main>
 
