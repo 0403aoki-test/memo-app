@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メモアプリ</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: 24px; margin-bottom: 24px; }
+    textarea { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }
+    button { margin-top: 8px; padding: 8px 16px; background: #333; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #555; }
+    ul { list-style: none; padding: 0; margin-top: 32px; }
+    li { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #eee; gap: 12px; }
+    .memo-content { flex: 1; white-space: pre-wrap; font-size: 14px; }
+    .memo-meta { font-size: 12px; color: #999; margin-top: 4px; }
+    .delete-btn { background: #e53e3e; flex-shrink: 0; }
+    .delete-btn:hover { background: #c53030; }
+    .empty { color: #999; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <h1>メモアプリ</h1>
+
+  <form action="/memos" method="post">
+    <textarea name="content" rows="4" placeholder="メモを入力..." required></textarea>
+    <button type="submit">保存</button>
+  </form>
+
+  {% if memos %}
+  <ul>
+    {% for memo in memos %}
+    <li>
+      <div>
+        <div class="memo-content">{{ memo.content }}</div>
+        <div class="memo-meta">{{ memo.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+      </div>
+      <form action="/memos/{{ memo.id }}/delete" method="post">
+        <button type="submit" class="delete-btn">削除</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">メモがありません。</p>
+  {% endif %}
+</body>
+</html>
