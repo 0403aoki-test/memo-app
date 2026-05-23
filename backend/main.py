@@ -1,35 +1,41 @@
-import os
-
-from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
+from alembic import command
+from alembic.config import Config
+from fastapi import Depends, FastAPI, Form, Request
+from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from database import engine, get_db
-from models import Base
-
-Base.metadata.create_all(bind=engine)
+from database import get_db
+from models import Memo
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-from routers.worker import router as worker_router
-app.include_router(worker_router)
 
-CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@app.on_event("startup")
+def run_migrations():
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")
 
 
 @app.get("/")
-def root():
-    return {"message": "Hello from FastAPI"}
+def index(request: Request, db: Session = Depends(get_db)):
+    memos = db.query(Memo).order_by(Memo.created_at.desc()).all()
+    return templates.TemplateResponse("index.html", {"request": request, "memos": memos})
 
 
-@app.get("/health/db")
-def db_health(db: Session = Depends(get_db)):
-    db.execute(text("SELECT 1"))
-    return {"status": "ok", "database": "connected"}
+@app.post("/memos")
+def create_memo(content: str = Form(...), db: Session = Depends(get_db)):
+    memo = Memo(content=content)
+    db.add(memo)
+    db.commit()
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.post("/memos/{memo_id}/delete")
+def delete_memo(memo_id: int, db: Session = Depends(get_db)):
+    memo = db.query(Memo).filter(Memo.id == memo_id).first()
+    if memo:
+        db.delete(memo)
+        db.commit()
+    return RedirectResponse(url="/", status_code=303)
