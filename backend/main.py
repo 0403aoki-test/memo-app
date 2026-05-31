@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from alembic import command
 from alembic.config import Config
 from fastapi import Depends, FastAPI, Form, Request
@@ -8,14 +10,16 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import Memo
 
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
 
-
-@app.on_event("startup")
-def run_migrations():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     alembic_cfg = Config("alembic.ini")
     command.upgrade(alembic_cfg, "head")
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")

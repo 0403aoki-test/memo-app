@@ -1,81 +1,56 @@
-# ts-practice
+# memo-app
 
-TypeScript・Svelte・FastAPI の学習用リポジトリです。
+FastAPI + Jinja2 で作ったシンプルなメモアプリ。
 
-## 構成
+## 技術スタック
 
-| ディレクトリ | 技術スタック | 説明 |
-|---|---|---|
-| `frontend/` | Svelte + Vite + Tailwind CSS | フロントエンド |
-| `backend/` | FastAPI (Python) | バックエンド API |
-
----
+| 要素 | 技術 |
+|---|---|
+| バックエンド | FastAPI (Python) |
+| フロント | Jinja2テンプレート |
+| DB (ローカル) | PostgreSQL on Docker |
+| DB (本番) | Supabase |
+| デプロイ先 | Cloud Run (GCP) |
+| CI/CD | GitHub Actions |
 
 ## 前提条件
 
-- Node.js (npm)
-- Python 3.x
+- Docker / Docker Compose
 
----
+## 起動方法
 
-## セットアップ & 起動
+### 1. 環境変数の設定
 
-### バックエンド
+```bash
+cp backend/.env.example backend/.env
+```
+
+`.env` の `DATABASE_URL` はDocker Compose使用時はそのままでOK。
+
+### 2. 起動
+
+```bash
+docker compose up
+```
+
+ブラウザで http://localhost:8000 を開く。
+
+### 停止
+
+```bash
+docker compose down
+```
+
+DBのデータも消す場合:
+
+```bash
+docker compose down -v
+```
+
+## ローカル開発（Docker不使用）
 
 ```bash
 cd backend
+pip install -r requirements.txt
+DATABASE_URL=postgresql://... uvicorn main:app --reload
 ```
-
-**初回のみ**
-```bash
-# requirements.txt の依存パッケージ（FastAPI, uvicornなど）をインストール
-pip3 install -r requirements.txt
-```
-
-**毎回**
-```bash
-# uvicorn で FastAPI サーバーを起動（--reload: ファイル変更時に自動再起動）
-python3 -m uvicorn main:app --reload
-```
-
-API は http://localhost:8000 で起動する。
-
-### フロントエンド
-
-```bash
-cd frontend
-```
-
-**初回のみ**
-```bash
-# package.json の依存パッケージ（Svelte, Vite, Tailwindなど）をインストール
-npm install
-```
-
-**毎回**
-```bash
-# Vite 開発サーバーを起動（ファイル保存時に自動リロード）
-npm run dev
-```
-
-ブラウザで http://localhost:5173 を開く。
-
----
-
-## 主なコマンド
-
-### フロントエンド
-
-| コマンド | 説明 |
-|---|---|
-| `npm run dev` | 開発サーバー起動 |
-| `npm run build` | プロダクションビルド |
-| `npm run preview` | ビルド結果のプレビュー |
-| `npm run check` | 型チェック |
-
-### バックエンド
-
-| コマンド | 説明 |
-|---|---|
-| `pip3 install -r requirements.txt` | 依存パッケージのインストール |
-| `python3 -m uvicorn main:app --reload` | 開発サーバー起動（ホットリロード有効） |

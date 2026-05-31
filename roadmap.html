@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>メモアプリ開発ロードマップ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+JP:wght@300;400;600&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --accent: #00ff88;
+    --accent2: #0088ff;
+    --text: #e0e0e0;
+    --muted: #666;
+    --done: #00ff88;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans JP', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  header {
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+    margin-bottom: 48px;
+  }
+
+  header .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  header .deadline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .card .card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card .card-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .stack-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .stack-table th {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-table td:first-child {
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    width: 160px;
+  }
+
+  .stack-table td:last-child {
+    font-weight: 600;
+  }
+
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .phase-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+
+  .phase-title {
+    font-weight: 600;
+    font-size: 15px;
+    flex: 1;
+  }
+
+  .phase-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(0,255,136,0.1);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+
+  .phase-body {
+    padding: 16px 20px;
+  }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .task:last-child {
+    border-bottom: none;
+  }
+
+  .task input[type="checkbox"] {
+    margin-top: 3px;
+    accent-color: var(--accent);
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .task label {
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .task.done label {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .subtasks {
+    margin-top: 8px;
+    margin-left: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .subtask {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subtask::before {
+    content: '→';
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--border);
+    font-size: 11px;
+  }
+
+  .goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .goal-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .goal-item::before {
+    content: '◆';
+    color: var(--accent2);
+    font-size: 8px;
+    flex-shrink: 0;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="label">DEPLOY ROADMAP</div>
+    <h1>メモアプリ開発・デプロイ</h1>
+    <div class="deadline">deadline: 2026年5月末</div>
+  </header>
+
+  <div class="section-title">目的とゴール</div>
+  <div class="goals">
+    <div class="goal-item">インフラ構築とデプロイの流れを理解する</div>
+    <div class="goal-item">GCPで本番環境の構築を体験する</div>
+    <div class="goal-item">DockerとCI/CDの基本を身につける</div>
+    <div class="goal-item">Claude Codeでアプリ開発を体験する</div>
+    <div class="goal-item">pushしたら自動デプロイされる状態を作る</div>
+    <div class="goal-item">毎月デプロイし続けるための基盤を作る</div>
+  </div>
+
+  <div class="section-title">技術スタック</div>
+  <table class="stack-table">
+    <tr><th>要素</th><th>技術</th></tr>
+    <tr><td>バックエンド</td><td>FastAPI（Python）</td></tr>
+    <tr><td>フロント</td><td>Jinja2テンプレート</td></tr>
+    <tr><td>DB（ローカル）</td><td>PostgreSQL on Docker</td></tr>
+    <tr><td>DB（本番）</td><td>Supabase（無料）</td></tr>
+    <tr><td>コンテナ</td><td>Docker</td></tr>
+    <tr><td>イメージ置き場</td><td>Artifact Registry（GCP）</td></tr>
+    <tr><td>デプロイ先</td><td>Cloud Run（GCP）</td></tr>
+    <tr><td>CI/CD</td><td>GitHub Actions</td></tr>
+  </table>
+
+  <div class="section-title">料金</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Supabase</div>
+      <div class="card-value">¥0 / 月</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Cloud Run</div>
+      <div class="card-value">¥0〜数円</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Artifact Registry</div>
+      <div class="card-value">¥0〜数円</div>
+    </div>
+    <div class="card">
+      <div class="card-label">GCP初回クレジット</div>
+      <div class="card-value">$300 / 90日</div>
+    </div>
+  </div>
+
+  <div class="section-title">フェーズ別タスク</div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 0</div>
+      <div class="phase-title">設計・準備</div>
+      <div class="phase-badge">進行中</div>
+    </div>
+    <div class="phase-body">
+      <div class="task done"><input type="checkbox" checked id="t1"><label for="t1">技術スタックを決める</label></div>
+      <div class="task done"><input type="checkbox" checked id="t2"><label for="t2">インフラ構成を決める</label></div>
+      <div class="task done"><input type="checkbox" checked id="t3"><label for="t3">GCPアカウント確認</label></div>
+      <div class="task done"><input type="checkbox" checked id="t4"><label for="t4">GitHubリポジトリ作成（memo-app）</label></div>
+      <div class="task done"><input type="checkbox" checked id="t5"><label for="t5">ローカルにclone</label></div>
+      <div class="task"><input type="checkbox" id="t6"><label for="t6">Supabaseアカウント・プロジェクト作成</label></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 1</div>
+      <div class="phase-title">ローカル開発</div>
+    </div>
+    <div class="phase-body">
+      <div class="task"><input type="checkbox" id="t7"><label for="t7">Cursorでプロジェクトを開く</label></div>
+      <div class="task"><input type="checkbox" id="t8"><label for="t8">既存コードの整理（不要なファイルを削除）</label></div>
+      <div class="task"><input type="checkbox" id="t9"><label for="t9">Claude Codeでメモアプリを実装</label>
+        <div class="subtasks">
+          <div class="subtask">DBテーブル設計（memosテーブル）</div>
+          <div class="subtask">GET /memos（一覧）</div>
+          <div class="subtask">POST /memos（作成）</div>
+          <div class="subtask">DELETE /memos/{id}（削除）</div>
+          <div class="subtask">SQLAlchemyでDB接続</div>
+          <div class="subtask">Jinja2でHTML画面作成</div>
+        </div>
+      </div>
+      <div class="task"><input type="checkbox" id="t10"><label for="t10">ローカルで動作確認</label></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 2</div>
+      <div class="phase-title">Docker化</div>
+    </div>
+    <div class="phase-body">
+      <div class="task"><input type="checkbox" id="t11"><label for="t11">Dockerfileを書く</label>
+        <div class="subtasks">
+          <div class="subtask">Pythonイメージベース</div>
+          <div class="subtask">依存関係インストール</div>
+          <div class="subtask">アプリ起動コマンド</div>
+        </div>
+      </div>
+      <div class="task"><input type="checkbox" id="t12"><label for="t12">docker-compose.ymlを書く</label>
+        <div class="subtasks">
+          <div class="subtask">FastAPIコンテナ</div>
+          <div class="subtask">PostgreSQLコンテナ</div>
+          <div class="subtask">環境変数の設定</div>
+        </div>
+      </div>
+      <div class="task"><input type="checkbox" id="t13"><label for="t13">docker compose upでローカル動作確認</label></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 3</div>
+      <div class="phase-title">Supabase設定</div>
+    </div>
+    <div class="phase-body">
+      <div class="task"><input type="checkbox" id="t14"><label for="t14">Supabaseプロジェクト作成</label></div>
+      <div class="task"><input type="checkbox" id="t15"><label for="t15">memosテーブルを作成</label></div>
+      <div class="task"><input type="checkbox" id="t16"><label for="t16">接続URLをメモしておく</label></div>
+      <div class="task"><input type="checkbox" id="t17"><label for="t17">ローカルからSupabaseに接続確認</label></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 4</div>
+      <div class="phase-title">GCP設定</div>
+    </div>
+    <div class="phase-body">
+      <div class="task"><input type="checkbox" id="t18"><label for="t18">GCPプロジェクト作成</label></div>
+      <div class="task"><input type="checkbox" id="t19"><label for="t19">Artifact Registryを有効化</label></div>
+      <div class="task"><input type="checkbox" id="t20"><label for="t20">Cloud Runを有効化</label></div>
+      <div class="task"><input type="checkbox" id="t21"><label for="t21">gcloud CLIをローカルにインストール</label></div>
+      <div class="task"><input type="checkbox" id="t22"><label for="t22">gcloud CLIでGCPにログイン</label></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 5</div>
+      <div class="phase-title">デプロイ</div>
+    </div>
+    <div class="phase-body">
+      <div class="task"><input type="checkbox" id="t23"><label for="t23">DockerイメージをビルドしてArtifact Registryにpush</label></div>
+      <div class="task"><input type="checkbox" id="t24"><label for="t24">Cloud Runにデプロイ</label></div>
+      <div class="task"><input type="checkbox" id="t25"><label for="t25">環境変数を設定（DATABASE_URL）</label></div>
+      <div class="task"><input type="checkbox" id="t26"><label for="t26">本番URLで動作確認</label></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 6</div>
+      <div class="phase-title">CI/CD（GitHub Actions）</div>
+    </div>
+    <div class="phase-body">
+      <div class="task"><input type="checkbox" id="t27"><label for="t27">GitHub Actionsのワークフローファイルを作成</label></div>
+      <div class="task"><input type="checkbox" id="t28"><label for="t28">GCPのサービスアカウント作成</label></div>
+      <div class="task"><input type="checkbox" id="t29"><label for="t29">GitHub SecretsにGCPの認証情報を登録</label></div>
+      <div class="task"><input type="checkbox" id="t30"><label for="t30">pushして自動デプロイを確認</label></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // チェックボックスの状態をlocalStorageに保存
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  
+  checkboxes.forEach(cb => {
+    const saved = localStorage.getItem(cb.id);
+    if (saved === 'true') {
+      cb.checked = true;
+      cb.closest('.task').classList.add('done');
+    }
+    cb.addEventListener('change', () => {
+      localStorage.setItem(cb.id, cb.checked);
+      cb.closest('.task').classList.toggle('done', cb.checked);
+    });
+  });
+</script>
+</body>
+</html>
